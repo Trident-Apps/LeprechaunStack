@@ -45,11 +45,13 @@ class LoadingFragment : Fragment() {
         Log.d(TAG, "On Create View")
 
         if (!mCheckers.isDeviceSecured(this@LoadingFragment.requireActivity())) {
+
             Log.d(TAG, "isSecured")
             lifecycleScope.launch(Dispatchers.IO) {
 
                 leprechaunViewModel.getDeepLink(this@LoadingFragment.requireActivity())
-                Log.d(TAG, "initafter")
+                Log.d(TAG, "init after")
+
                 lifecycleScope.launch(Dispatchers.Main) {
                     leprechaunViewModel.urlLiveData.observe(viewLifecycleOwner) {
                         Log.d(TAG, "Appsflyer init")

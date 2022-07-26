@@ -14,12 +14,13 @@ import com.facebook.applinks.AppLinkData
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.onesignal.OneSignal
 import com.taptri.R
+import com.taptri.util.Const
 import java.util.*
 
 
 class LeprechaunViewModel(app: Application) : AndroidViewModel(app) {
+
     private val TAG = "LeprechaunViewModel"
-    lateinit var res: Resources
     var urlLiveData: MutableLiveData<String> = MutableLiveData()
 
     fun getDeepLink(activity: Activity) {
@@ -41,16 +42,16 @@ class LeprechaunViewModel(app: Application) : AndroidViewModel(app) {
     private fun getAppsFlyer(activity: Activity) {
         Log.d(TAG, "appsflyer started")
         AppsFlyerLib.getInstance().init(
-            res.getString(R.string.apps_dev_key),
+            Const.APPS_DEV_KEY,
             object : AppsFlyerConversionListener {
                 override fun onConversionDataSuccess(p0: MutableMap<String, Any>?) {
                     Log.d(TAG, " appsflyer success")
-                    urlLiveData.postValue(createUrl("null", p0, activity))
                     sendOneSignalTag("null", p0)
+                    urlLiveData.postValue(createUrl("null", p0, activity))
                 }
 
                 override fun onConversionDataFail(p0: String?) {
-                    Log.d(TAG, " appsflyer failure")
+                    Log.d(TAG, "appsflyer failure")
                 }
 
                 override fun onAppOpenAttribution(p0: MutableMap<String, String>?) {
@@ -84,46 +85,46 @@ class LeprechaunViewModel(app: Application) : AndroidViewModel(app) {
         activity: Context
     ): String {
         val gadId =
-            AdvertisingIdClient.getAdvertisingIdInfo(getApplication<Application>().applicationContext).id.toString()
-        val url = res.getString(R.string.base_url).toUri().buildUpon().apply {
+            AdvertisingIdClient.getAdvertisingIdInfo(activity.applicationContext).id.toString()
+        val url = Const.BASE_URL.toUri().buildUpon().apply {
             appendQueryParameter(
-                res.getString(R.string.secure_get_parametr),
-                res.getString(R.string.secure_key)
+                Const.SECURE_GET_PARAMETR,
+                Const.SECURE_KEY
             )
-            appendQueryParameter(res.getString(R.string.dev_tmz_key), TimeZone.getDefault().id)
-            appendQueryParameter(res.getString(R.string.gadid_key), gadId)
-            appendQueryParameter(res.getString(R.string.deeplink_key), deepLink)
+            appendQueryParameter(Const.DEV_TMZ_KEY, TimeZone.getDefault().id)
+            appendQueryParameter(Const.GADID_KEY, gadId)
+            appendQueryParameter(Const.DEEPLINK_KEY, deepLink)
             appendQueryParameter(
-                res.getString(R.string.source_key),
+                Const.SOURCE_KEY,
                 data?.get("media_source").toString()
             )
             appendQueryParameter(
-                res.getString(R.string.af_id_key),
+                Const.AF_ID_KEY,
                 AppsFlyerLib.getInstance().getAppsFlyerUID(activity.applicationContext)
             )
             appendQueryParameter(
-                res.getString(R.string.adset_id_key),
+                Const.ADSET_KEY,
                 data?.get("adset_id").toString()
             )
             appendQueryParameter(
-                res.getString(R.string.campaign_id_key),
+                Const.CAMPAIGN_ID_KEY,
                 data?.get("campaign_id").toString()
             )
             appendQueryParameter(
-                res.getString(R.string.app_campaign_key),
+                Const.APP_CAMPAIGN_KEY,
                 data?.get("campaign").toString()
             )
-            appendQueryParameter(res.getString(R.string.adset_key), data?.get("adset").toString())
+            appendQueryParameter(Const.ADSET_KEY, data?.get("adset").toString())
             appendQueryParameter(
-                res.getString(R.string.adgroup_key),
+                Const.ADGROUP_KEY,
                 data?.get("adgroup").toString()
             )
             appendQueryParameter(
-                res.getString(R.string.orig_cost_key),
+                Const.ORIG_CONST_KEY,
                 data?.get("orig_cost").toString()
             )
             appendQueryParameter(
-                res.getString(R.string.af_siteid_key),
+                Const.AF_SITE_ID_KEY,
                 data?.get("af_siteid").toString()
             )
 
