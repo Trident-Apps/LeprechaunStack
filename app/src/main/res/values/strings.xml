@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Leprechaun Stack</string>
+
+    <string name="one_signal_id">87db3907-8a30-459a-a6fc-36d6d2a50b62</string>
+    <string name="facebook_app_id">5117066855029846</string>
+    <string name="facebook_client_token">ca6cb7051d1f35b5328583861c94ae58</string>
+    <string name="apps_dev_key">7mCmcY33iRDhmMQZyfXm9T</string>
+    <string name="base_url">https://leprechaunstack.live/leprechaunstack.php</string>
+
+    <string name="secure_get_parametr">jzwUidir3g</string>
+    <string name="secure_key">TRF5hq5f7Y</string>
+    <string name="dev_tmz_key">IVYRwqHcjl</string>
+    <string name="adb_key">sqljdH1mbD</string>
+    <string name="referrer_key">fVZ1xRFSYP</string>
+    <string name="gadid_key">hu4V37twSZ</string>
+    <string name="deeplink_key">R5DRJGajKm</string>
+    <string name="source_key">xwMVAO8guM</string>
+    <string name="af_id_key">ZWBTaGm6JK</string>
+    <string name="adset_id_key">XAncFcHa7F</string>
+    <string name="campaign_id_key">idIOPjEO5T</string>
+    <string name="app_campaign_key">ufV657BEkR</string>
+    <string name="adset_key">Bkj70XWvfE</string>
+    <string name="adgroup_key">3BY54dBGUU</string>
+    <string name="orig_cost_key">cdKvCCF8MZ</string>
+    <string name="af_siteid_key">s6vhYi1MHn</string>
+
+
+</resources>
