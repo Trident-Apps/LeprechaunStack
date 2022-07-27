@@ -1,6 +1,5 @@
 package com.taptri.ui.activities
 
-import android.annotation.TargetApi
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,11 +9,10 @@ import androidx.lifecycle.lifecycleScope
 import com.taptri.databinding.LoadingActivityBinding
 import com.taptri.model.database.UrlDataBase
 import com.taptri.util.Checkers
-import com.taptri.ui.viewmodel.LeprechaunViewModel
-import com.taptri.ui.viewmodel.LeprechaunViewModelFactory
+import com.taptri.viewmodel.LeprechaunViewModel
+import com.taptri.viewmodel.LeprechaunViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 class LoadingActivity : AppCompatActivity() {
 

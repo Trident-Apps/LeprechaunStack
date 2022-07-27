@@ -10,8 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.taptri.databinding.WebViewActivityBinding
 import com.taptri.model.UrlEntity
 import com.taptri.model.database.UrlDataBase
-import com.taptri.ui.viewmodel.LeprechaunViewModel
-import com.taptri.ui.viewmodel.LeprechaunViewModelFactory
+import com.taptri.viewmodel.LeprechaunViewModel
+import com.taptri.viewmodel.LeprechaunViewModelFactory
 
 class WebViewActivity : AppCompatActivity() {
     private val TAG = "LeprechaunViewModel"
