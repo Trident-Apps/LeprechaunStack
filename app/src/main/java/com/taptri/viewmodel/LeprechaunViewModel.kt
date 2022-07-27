@@ -14,14 +14,14 @@ import com.facebook.applinks.AppLinkData
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.onesignal.OneSignal
 import com.taptri.model.UrlEntity
-import com.taptri.model.database.UrlDataBase
+import com.taptri.model.database.AppDatabase
 import com.taptri.util.Const
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
 
-class LeprechaunViewModel(app: Application, private val db: UrlDataBase) : AndroidViewModel(app) {
+class LeprechaunViewModel(app: Application, private val db: AppDatabase) : AndroidViewModel(app) {
 
     private val TAG = "LeprechaunViewModel"
     var urlLiveData: MutableLiveData<String> = MutableLiveData()
@@ -34,6 +34,7 @@ class LeprechaunViewModel(app: Application, private val db: UrlDataBase) : Andro
                 Log.d(TAG, "app started")
                 getAppsFlyer(activity)
             } else {
+                db.userDao().insertUrl(UrlEntity(1, createUrl(it?.targetUri.toString(), null, activity), true))
                 urlLiveData.postValue(createUrl(it?.targetUri.toString(), null, activity))
                 sendOneSignalTag(it?.targetUri.toString(), null)
             }
@@ -50,6 +51,8 @@ class LeprechaunViewModel(app: Application, private val db: UrlDataBase) : Andro
                 override fun onConversionDataSuccess(p0: MutableMap<String, Any>?) {
                     Log.d(TAG, " appsflyer success")
                     sendOneSignalTag("null", p0)
+                    db.userDao().insertUrl(UrlEntity(1, createUrl("null", p0, activity), true))
+
                     urlLiveData.postValue(createUrl("null", p0, activity))
                     Log.d(TAG, "${urlLiveData.postValue(createUrl("null", p0, activity))}")
                 }
@@ -138,8 +141,8 @@ class LeprechaunViewModel(app: Application, private val db: UrlDataBase) : Andro
     }
 
     fun saveUrl(urlEntity: UrlEntity) = viewModelScope.launch(Dispatchers.IO) {
-        db.getDao().insertUrl(urlEntity)
+        db.userDao().insertUrl(urlEntity)
     }
 
-    fun getUrl() = db.getDao().getUrl()
+    fun getUrl() = db.userDao().getUrl()
 }

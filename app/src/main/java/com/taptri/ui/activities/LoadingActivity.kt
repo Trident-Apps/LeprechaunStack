@@ -6,8 +6,9 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
 import com.taptri.databinding.LoadingActivityBinding
-import com.taptri.model.database.UrlDataBase
+import com.taptri.model.database.AppDatabase
 import com.taptri.util.Checkers
 import com.taptri.viewmodel.LeprechaunViewModel
 import com.taptri.viewmodel.LeprechaunViewModelFactory
@@ -22,22 +23,34 @@ class LoadingActivity : AppCompatActivity() {
     private val checker = Checkers(this)
     private lateinit var leprechaunViewModel: LeprechaunViewModel
 
+
+    companion object {
+
+        lateinit var db : AppDatabase
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = LoadingActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        db = Room.databaseBuilder(
+                applicationContext,
+        AppDatabase::class.java, "database-name"
+        ).build()
+
         val viewModelFactory =
-            LeprechaunViewModelFactory(application, UrlDataBase(applicationContext))
+            LeprechaunViewModelFactory(application,   db)
         leprechaunViewModel =
             ViewModelProvider(this, viewModelFactory)[LeprechaunViewModel::class.java]
 
         if (!checker.isDeviceSecured(this)) {
             Log.d(TAG, "passed secure check")
             leprechaunViewModel.getUrl().observe(this) { urlEntitry ->
-                urlEntitry?.let {
+                Log.d(TAG, urlEntitry.toString())
+                Log.d(TAG, "passed secure check2")
+
                     Log.d(TAG, "checking entity ${urlEntitry}")
-                    if ((urlEntitry.url == "null") && !urlEntitry.flag) {
+                    if (urlEntitry == null) {
                         Log.d(TAG, "entity is empty")
                         lifecycleScope.launch(Dispatchers.IO) {
                             leprechaunViewModel.getDeepLink(this@LoadingActivity)
@@ -55,7 +68,7 @@ class LoadingActivity : AppCompatActivity() {
                         }
                     }
                 }
-            }
+
         } else {
             startActivity(Intent(this, GameActivity::class.java))
         }

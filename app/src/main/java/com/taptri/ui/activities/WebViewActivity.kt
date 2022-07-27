@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.taptri.databinding.WebViewActivityBinding
 import com.taptri.model.UrlEntity
-import com.taptri.model.database.UrlDataBase
+import com.taptri.ui.activities.LoadingActivity.Companion.db
 import com.taptri.viewmodel.LeprechaunViewModel
 import com.taptri.viewmodel.LeprechaunViewModelFactory
 
@@ -28,7 +28,7 @@ class WebViewActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val viewModelFactory =
-            LeprechaunViewModelFactory(application, UrlDataBase(applicationContext))
+            LeprechaunViewModelFactory(application, db)
         leprechaunViewModel =
             ViewModelProvider(this, viewModelFactory)[LeprechaunViewModel::class.java]
 
