@@ -4,7 +4,7 @@ import android.app.Activity
 import android.provider.Settings
 import java.io.File
 
-class Checkers(){
+class Checkers(activity: Activity){
 
      fun isDeviceSecured(activity: Activity): Boolean {
         return checkRoot() && checkADB(activity) == "1"

@@ -5,8 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class UrlEntity(
-    @PrimaryKey(autoGenerate = false)
-    val id: Int = 1,
-    val url: String,
-    val flag: Boolean
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 1,
+    var url: String = "null",
+    var flag: Boolean = false
 )

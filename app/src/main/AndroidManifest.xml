@@ -18,17 +18,28 @@
         tools:replace="android:fullBackupContent"
         tools:targetApi="31">
         <activity
-            android:name=".ui.LeprechaunActivity"
+            android:name=".ui.activities.LeprechaunActivity"
             android:exported="true"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.App.Starting">
+            android:theme="@style/Theme.LeprechaunStack">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.activities.LoadingActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.activities.GameActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.activities.WebViewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="adjustResize" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

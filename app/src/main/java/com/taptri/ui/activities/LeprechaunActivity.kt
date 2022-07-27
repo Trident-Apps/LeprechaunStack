@@ -1,5 +1,6 @@
-package com.taptri.ui
+package com.taptri.ui.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -14,7 +15,6 @@ import kotlinx.coroutines.launch
 class LeprechaunActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        installSplashScreen()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.leprechaun_activity)
 
@@ -24,5 +24,7 @@ class LeprechaunActivity : AppCompatActivity() {
             OneSignal.setAppId(Const.ONE_SIGNAL_ID)
             OneSignal.setExternalUserId(gadId)
         }
+
+        startActivity(Intent(this@LeprechaunActivity, LoadingActivity::class.java))
     }
 }

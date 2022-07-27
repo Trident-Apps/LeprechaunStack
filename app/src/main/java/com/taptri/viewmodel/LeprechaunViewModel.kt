@@ -3,22 +3,25 @@ package com.taptri.viewmodel
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.content.res.Resources
 import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.facebook.applinks.AppLinkData
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.onesignal.OneSignal
-import com.taptri.R
+import com.taptri.model.UrlEntity
+import com.taptri.model.database.UrlDataBase
 import com.taptri.util.Const
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 
-class LeprechaunViewModel(app: Application) : AndroidViewModel(app) {
+class LeprechaunViewModel(app: Application, private val db: UrlDataBase) : AndroidViewModel(app) {
 
     private val TAG = "LeprechaunViewModel"
     var urlLiveData: MutableLiveData<String> = MutableLiveData()
@@ -48,6 +51,7 @@ class LeprechaunViewModel(app: Application) : AndroidViewModel(app) {
                     Log.d(TAG, " appsflyer success")
                     sendOneSignalTag("null", p0)
                     urlLiveData.postValue(createUrl("null", p0, activity))
+                    Log.d(TAG, "${urlLiveData.postValue(createUrl("null", p0, activity))}")
                 }
 
                 override fun onConversionDataFail(p0: String?) {
@@ -130,5 +134,12 @@ class LeprechaunViewModel(app: Application) : AndroidViewModel(app) {
 
         }.toString()
         return url
+
     }
+
+    fun saveUrl(urlEntity: UrlEntity) = viewModelScope.launch(Dispatchers.IO) {
+        db.getDao().insertUrl(urlEntity)
+    }
+
+    fun getUrl() = db.getDao().getUrl()
 }
