@@ -1,4 +1,4 @@
-package com.taptri.viewmodel
+package com.taptri.ui.viewmodel
 
 import android.app.Activity
 import android.app.Application
