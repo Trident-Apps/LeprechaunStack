@@ -42,6 +42,8 @@ class WebViewActivity : AppCompatActivity() {
         webView.settings.javaScriptEnabled = true
         CookieManager.getInstance().setAcceptCookie(true)
         CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true)
+        webView.settings.userAgentString =
+            "Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36"
         webView.settings.domStorageEnabled = true
         webView.settings.loadWithOverviewMode = false
 
@@ -76,17 +78,13 @@ class WebViewActivity : AppCompatActivity() {
 
         override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)
-            url?.let {url->
-                when {
-                    url == "https://leprechaunstack.live/" -> {
-                        startActivity(Intent(this@WebViewActivity, GameActivity::class.java))
-                    }
-                    else -> {
-                        leprechaunViewModel.getUrl().observe(this@WebViewActivity) { urlEntity ->
-                            if (urlEntity?.flag == false) {
-                                leprechaunViewModel.saveUrl(UrlEntity(url = url, flag = true))
-                            }
-                        }
+
+            if (url == "https://leprechaunstack.live/") {
+                startActivity(Intent(this@WebViewActivity, GameActivity::class.java))
+            } else {
+                leprechaunViewModel.getUrl().observe(this@WebViewActivity) {
+                    if (it == null) {
+                        leprechaunViewModel.saveUrl(UrlEntity(url = url!!))
                     }
                 }
             }

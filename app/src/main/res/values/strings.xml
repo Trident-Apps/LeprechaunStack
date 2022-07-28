@@ -3,7 +3,8 @@
 
     <string name="facebook_app_id">5117066855029846</string>
     <string name="facebook_client_token">ca6cb7051d1f35b5328583861c94ae58</string>
-
+    <string name="total_score">Total Score</string>
+    <string name="spin_button">Press to Spin</string>
 
 
 </resources>

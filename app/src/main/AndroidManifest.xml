@@ -20,7 +20,7 @@
         <activity
             android:name=".ui.activities.LeprechaunActivity"
             android:exported="true"
-            android:theme="@style/Theme.LeprechaunStack">
+            android:theme="@style/Theme.App.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

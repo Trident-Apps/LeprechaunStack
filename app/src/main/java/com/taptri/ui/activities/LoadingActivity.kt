@@ -6,6 +6,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.ads.identifier.AdvertisingIdClient
+import com.taptri.LeprechaunApp.Companion.gadId
 import com.taptri.databinding.LoadingActivityBinding
 import com.taptri.model.database.UrlDataBase
 import com.taptri.util.Checkers
@@ -16,7 +18,6 @@ import kotlinx.coroutines.launch
 
 class LoadingActivity : AppCompatActivity() {
 
-    private val TAG = "Leprechaun ViewModel"
     private var _binding: LoadingActivityBinding? = null
     private val binding get() = _binding!!
     private val checker = Checkers(this)
@@ -27,68 +28,37 @@ class LoadingActivity : AppCompatActivity() {
         _binding = LoadingActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        lifecycleScope.launch(Dispatchers.IO) {
+            gadId = AdvertisingIdClient.getAdvertisingIdInfo(applicationContext).id.toString()
+        }
+
         val viewModelFactory =
             LeprechaunViewModelFactory(application, UrlDataBase(applicationContext))
         leprechaunViewModel =
             ViewModelProvider(this, viewModelFactory)[LeprechaunViewModel::class.java]
 
         if (!checker.isDeviceSecured(this)) {
-            Log.d(TAG, "passed secure check")
             leprechaunViewModel.getUrl().observe(this) { urlEntitry ->
-                urlEntitry?.let {
-                    Log.d(TAG, "checking entity ${urlEntitry}")
-                    if ((urlEntitry.url == "null") && !urlEntitry.flag) {
-                        Log.d(TAG, "entity is empty")
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            leprechaunViewModel.getDeepLink(this@LoadingActivity)
-                            Log.d(TAG, "started deeplink")
-                            lifecycleScope.launch(Dispatchers.Main) {
-                                leprechaunViewModel.urlLiveData.observe(this@LoadingActivity) {
-                                    startWebView(it)
-                                    Log.d(TAG, "webView started with new url")
-                                }
+
+                if (urlEntitry == null) {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        leprechaunViewModel.getDeepLink(this@LoadingActivity)
+
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            leprechaunViewModel.urlLiveData.observe(this@LoadingActivity) {
+                                startWebView(it)
                             }
                         }
-                    } else {
-                        leprechaunViewModel.getUrl().observe(this) {
-                            startWebView(it!!.url)
-                        }
+                    }
+                } else {
+                    leprechaunViewModel.getUrl().observe(this) {
+                        startWebView(it!!.url)
                     }
                 }
             }
         } else {
             startActivity(Intent(this, GameActivity::class.java))
         }
-
-//        when {
-//            !checker.isDeviceSecured(this) -> {
-//
-//                leprechaunViewModel.getUrl().observe(this) {
-//                    if (it?.url == "null" && it.flag == false) {
-//
-//                        lifecycleScope.launch(Dispatchers.IO) {
-//                            leprechaunViewModel.getDeepLink(this@LoadingActivity)
-//
-//                            lifecycleScope.launch(Dispatchers.Main) {
-//                                leprechaunViewModel.urlLiveData.observe(this@LoadingActivity) {
-//                                    startWebView(it)
-//                                }
-//                            }
-//                        }
-//                    } else {
-//                        leprechaunViewModel.getUrl().observe(this) {
-//                            if (it != null) {
-//                                startWebView(it.url)
-//                            }
-//                        }
-//                    }
-//                }
-//
-//            }
-//            else -> {
-//                startActivity(Intent(this, GameActivity::class.java))
-//            }
-//        }
     }
 
     private fun startWebView(url: String) {
