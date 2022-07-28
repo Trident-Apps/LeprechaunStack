@@ -107,7 +107,7 @@ class LeprechaunViewModel(app: Application, private val db: UrlDataBase) : Andro
                 AppsFlyerLib.getInstance().getAppsFlyerUID(activity.applicationContext)
             )
             appendQueryParameter(
-                Const.ADSET_KEY,
+                Const.ADSET_ID_KEY,
                 data?.get("adset_id").toString()
             )
             appendQueryParameter(
