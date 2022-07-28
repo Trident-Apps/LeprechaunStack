@@ -46,30 +46,17 @@ class LoadingActivity : AppCompatActivity() {
 
                         lifecycleScope.launch(Dispatchers.Main) {
                             leprechaunViewModel.urlLiveData.observe(this@LoadingActivity) {
-
-
-                                if (urlEntitry == null) {
-                                    lifecycleScope.launch(Dispatchers.IO) {
-                                        leprechaunViewModel.getDeepLink(this@LoadingActivity)
-
-                                        lifecycleScope.launch(Dispatchers.Main) {
-                                            leprechaunViewModel.urlLiveData.observe(this@LoadingActivity) {
-                                                startWebView(it)
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    leprechaunViewModel.getUrl().observe(this@LoadingActivity) {
-                                        startWebView(it!!.url)
-                                    }
-                                }
+                                startWebView(it)
                             }
                         }
                     }
-
+                } else {
+                    leprechaunViewModel.getUrl().observe(this@LoadingActivity) {
+                        startWebView(it!!.url)
+                    }
                 }
             }
-        }else {
+        } else {
             startActivity(Intent(this, GameActivity::class.java))
         }
     }
