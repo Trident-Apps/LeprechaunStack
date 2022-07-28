@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class UrlEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 1,
-    var url: String = "null",
+    var url: String = "null"
 )

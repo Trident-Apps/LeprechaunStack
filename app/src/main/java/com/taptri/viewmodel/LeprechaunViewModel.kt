@@ -51,7 +51,6 @@ class LeprechaunViewModel(app: Application, private val db: UrlDataBase) : Andro
             Const.APPS_DEV_KEY,
             object : AppsFlyerConversionListener {
                 override fun onConversionDataSuccess(p0: MutableMap<String, Any>?) {
-
                     sendOneSignalTag("null", p0)
                     urlLiveData.postValue(createUrl("null", p0, activity))
 

@@ -22,6 +22,7 @@ class LoadingActivity : AppCompatActivity() {
     private val checker = Checkers(this)
     private lateinit var leprechaunViewModel: LeprechaunViewModel
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = LoadingActivityBinding.inflate(layoutInflater)
@@ -45,17 +46,30 @@ class LoadingActivity : AppCompatActivity() {
 
                         lifecycleScope.launch(Dispatchers.Main) {
                             leprechaunViewModel.urlLiveData.observe(this@LoadingActivity) {
-                                startWebView(it)
+
+
+                                if (urlEntitry == null) {
+                                    lifecycleScope.launch(Dispatchers.IO) {
+                                        leprechaunViewModel.getDeepLink(this@LoadingActivity)
+
+                                        lifecycleScope.launch(Dispatchers.Main) {
+                                            leprechaunViewModel.urlLiveData.observe(this@LoadingActivity) {
+                                                startWebView(it)
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    leprechaunViewModel.getUrl().observe(this@LoadingActivity) {
+                                        startWebView(it!!.url)
+                                    }
+                                }
                             }
                         }
                     }
-                } else {
-                    leprechaunViewModel.getUrl().observe(this) {
-                        startWebView(it!!.url)
-                    }
+
                 }
             }
-        } else {
+        }else {
             startActivity(Intent(this, GameActivity::class.java))
         }
     }
@@ -71,3 +85,5 @@ class LoadingActivity : AppCompatActivity() {
         _binding = null
     }
 }
+
+
