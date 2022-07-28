@@ -3,7 +3,6 @@ package com.taptri.viewmodel
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -13,7 +12,6 @@ import com.appsflyer.AppsFlyerLib
 import com.facebook.applinks.AppLinkData
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.onesignal.OneSignal
-import com.taptri.LeprechaunApp
 import com.taptri.LeprechaunApp.Companion.gadId
 import com.taptri.model.UrlEntity
 import com.taptri.model.database.UrlDataBase

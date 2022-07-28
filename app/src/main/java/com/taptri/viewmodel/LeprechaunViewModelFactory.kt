@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.taptri.model.database.UrlDataBase
 
+
 class LeprechaunViewModelFactory(private val app: Application, private val db: UrlDataBase) :
     ViewModelProvider.Factory {
 
