@@ -3,6 +3,7 @@ package com.taptri.ui.activities
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Message
 import android.util.Log
 import android.webkit.*
 import androidx.appcompat.app.AppCompatActivity
@@ -19,7 +20,7 @@ class WebViewActivity : AppCompatActivity() {
     private var _binding: WebViewActivityBinding? = null
     private val binding get() = _binding!!
     lateinit var webView: WebView
-    private var messageAb: ValueCallback<Array<Uri>>? = null
+    private var messageAb: ValueCallback<Array<Uri?>>? = null
     lateinit var leprechaunViewModel: LeprechaunViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,13 +56,37 @@ class WebViewActivity : AppCompatActivity() {
 
             override fun onShowFileChooser(
                 webView: WebView?,
-                filePathCallback: ValueCallback<Array<Uri>>?,
+                filePathCallback: ValueCallback<Array<Uri?>>?,
                 fileChooserParams: FileChooserParams?
             ): Boolean {
                 messageAb = filePathCallback
-
+                val intent = Intent(Intent.ACTION_GET_CONTENT)
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                intent.type = "image/*"
+                startActivityForResult(
+                    Intent.createChooser(intent, "Image Chooser"), 1
+                )
                 return super.onShowFileChooser(webView, filePathCallback, fileChooserParams)
 
+            }
+
+            override fun onCreateWindow(
+                view: WebView?,
+                isDialog: Boolean,
+                isUserGesture: Boolean,
+                resultMsg: Message?
+            ): Boolean {
+                val newWebView = WebView(applicationContext)
+                newWebView.settings.javaScriptEnabled = true
+                newWebView.webChromeClient = this
+                newWebView.settings.javaScriptCanOpenWindowsAutomatically = true
+                newWebView.settings.domStorageEnabled = true
+                newWebView.settings.setSupportMultipleWindows(true)
+                val transport = resultMsg?.obj as WebView.WebViewTransport
+                transport.webView = newWebView
+                resultMsg.sendToTarget()
+                return true
             }
         }
 

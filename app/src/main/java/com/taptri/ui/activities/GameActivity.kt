@@ -28,22 +28,12 @@ class GameActivity : AppCompatActivity() {
 
     private fun spin() {
         val imageViewsList = listOf(
-            R.drawable.icon2,
-            R.drawable.icon2,
-            R.drawable.icon2,
+
             R.drawable.icon2,
             R.drawable.icon3,
-            R.drawable.icon3,
-            R.drawable.icon3,
-            R.drawable.icon3,
-            R.drawable.icon5,
-            R.drawable.icon5,
-            R.drawable.icon5,
             R.drawable.icon5,
             R.drawable.icon6,
-            R.drawable.icon6,
-            R.drawable.icon6,
-            R.drawable.icon6,
+
         ).shuffled()
         binding.imageView1.setImageResource(imageViewsList[0])
         binding.imageView1.tag = imageViewsList[0]

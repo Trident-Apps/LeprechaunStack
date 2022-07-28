@@ -3,6 +3,7 @@ package com.taptri.viewmodel
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -51,6 +52,7 @@ class LeprechaunViewModel(app: Application, private val db: UrlDataBase) : Andro
             Const.APPS_DEV_KEY,
             object : AppsFlyerConversionListener {
                 override fun onConversionDataSuccess(p0: MutableMap<String, Any>?) {
+                    Log.d("MyOneSignalTag", p0.toString())
                     sendOneSignalTag("null", p0)
                     urlLiveData.postValue(createUrl("null", p0, activity))
 
@@ -76,7 +78,7 @@ class LeprechaunViewModel(app: Application, private val db: UrlDataBase) : Andro
         if (campaign == "null" && deepLink == "null") {
             OneSignal.sendTag("key2", "organic")
         } else if (deepLink != "null") {
-            OneSignal.sendTag("key2,", deepLink.replace("myapp://", "").substringBefore("/"))
+            OneSignal.sendTag("key2", deepLink.replace("myapp://", "").substringBefore("/"))
         } else if (campaign != "null") {
             OneSignal.sendTag("key2", campaign.substringBefore("_"))
         }
