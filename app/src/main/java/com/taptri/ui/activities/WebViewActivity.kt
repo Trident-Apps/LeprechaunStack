@@ -23,6 +23,11 @@ class WebViewActivity : AppCompatActivity() {
     private var messageAb: ValueCallback<Array<Uri?>>? = null
     lateinit var leprechaunViewModel: LeprechaunViewModel
 
+    private val resultCode = 1
+
+    private val imageTitle = "Image Chooser"
+    private val image1 = "image/*"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = WebViewActivityBinding.inflate(layoutInflater)
@@ -51,31 +56,22 @@ class WebViewActivity : AppCompatActivity() {
         webView.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
-
             }
 
+            //For Android API >= 21 (5.0 OS)
             override fun onShowFileChooser(
                 webView: WebView?,
                 filePathCallback: ValueCallback<Array<Uri?>>?,
                 fileChooserParams: FileChooserParams?
             ): Boolean {
                 messageAb = filePathCallback
-                val intent = Intent(Intent.ACTION_GET_CONTENT)
-                intent.addCategory(Intent.CATEGORY_OPENABLE)
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                intent.type = "image/*"
-                startActivityForResult(
-                    Intent.createChooser(intent, "Image Chooser"), 1
-                )
-                return super.onShowFileChooser(webView, filePathCallback, fileChooserParams)
-
+                selectImageIfNeed()
+                return true
             }
 
             override fun onCreateWindow(
-                view: WebView?,
-                isDialog: Boolean,
-                isUserGesture: Boolean,
-                resultMsg: Message?
+                view: WebView?, isDialog: Boolean,
+                isUserGesture: Boolean, resultMsg: Message
             ): Boolean {
                 val newWebView = WebView(applicationContext)
                 newWebView.settings.javaScriptEnabled = true
@@ -83,15 +79,32 @@ class WebViewActivity : AppCompatActivity() {
                 newWebView.settings.javaScriptCanOpenWindowsAutomatically = true
                 newWebView.settings.domStorageEnabled = true
                 newWebView.settings.setSupportMultipleWindows(true)
-                val transport = resultMsg?.obj as WebView.WebViewTransport
+                val transport = resultMsg.obj as WebView.WebViewTransport
                 transport.webView = newWebView
                 resultMsg.sendToTarget()
+
+                newWebView.webViewClient = object : WebViewClient() {
+                    override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+                        view.loadUrl(url)
+                        return true
+                    }
+                }
+
                 return true
             }
         }
 
     }
 
+    private fun selectImageIfNeed() {
+        val i = Intent(Intent.ACTION_GET_CONTENT)
+        i.addCategory(Intent.CATEGORY_OPENABLE)
+        i.type = image1
+        startActivityForResult(
+            Intent.createChooser(i, imageTitle),
+            resultCode
+        )
+    }
     private inner class LocalClient : WebViewClient() {
         override fun onReceivedError(
             view: WebView?,
